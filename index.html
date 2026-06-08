@@ -1,0 +1,326 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>How We Review a Course</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,500;9..144,600;9..144,640&family=Hanken+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --paper:#FBF1DE; --paper-2:#F5E8D0; --ink:#2E2620; --muted:#7E7261;
+    --line:#EBDBC0; --card:#FFFCF5;
+    --terra:#C0552F; --terra-soft:#F8E0D0;
+    --teal:#3D6A53;  --teal-soft:#E0E9DC;
+    --gold:#AB7413;  --gold-soft:#F5E5C2;
+    --shadow:0 1px 2px rgba(70,50,30,.05), 0 10px 28px rgba(95,68,38,.09);
+    --radius:14px;
+  }
+  *{box-sizing:border-box}
+  html{scroll-behavior:smooth}
+  body{
+    margin:0; background:var(--paper); color:var(--ink);
+    font-family:"Hanken Grotesk",system-ui,sans-serif;
+    font-size:17.5px; line-height:1.62; letter-spacing:.005em;
+    -webkit-font-smoothing:antialiased;
+  }
+  .wrap{max-width:880px; margin:0 auto; padding:0 24px}
+  h1,h2,h3{font-family:"Fraunces",Georgia,serif; font-weight:600; line-height:1.12; letter-spacing:-.01em; margin:0}
+  .eyebrow{font-size:13px; font-weight:600; letter-spacing:.14em; text-transform:uppercase; color:var(--terra)}
+
+  /* hero */
+  header.hero{padding:84px 0 40px; border-bottom:1px solid var(--line)}
+  .hero h1{font-size:clamp(38px,6vw,60px); font-weight:640; max-width:14ch}
+  .hero .lede{font-size:clamp(19px,2.4vw,22px); color:var(--muted); margin-top:22px; max-width:54ch; line-height:1.5}
+  .hero .meta{margin-top:30px; font-size:14px; color:var(--muted); display:flex; gap:18px; flex-wrap:wrap; align-items:center}
+  .hero .meta b{color:var(--ink); font-weight:600}
+  .dot{width:5px;height:5px;border-radius:50%;background:var(--line)}
+
+  section{padding:56px 0; border-bottom:1px solid var(--line)}
+  .sec-head{margin-bottom:30px}
+  .sec-head h2{font-size:clamp(26px,3.6vw,34px)}
+  .sec-head p{color:var(--muted); margin:12px 0 0; max-width:60ch}
+
+  /* level cards */
+  .levels{display:flex; flex-direction:column; gap:16px}
+  details.card{
+    background:var(--card); border:1px solid var(--line); border-radius:var(--radius);
+    box-shadow:var(--shadow); overflow:hidden; transition:border-color .2s;
+  }
+  details.card[open]{border-color:#D9CCB6}
+  summary.cap{list-style:none; cursor:pointer; padding:22px 24px; display:flex; gap:18px; align-items:flex-start}
+  summary.cap::-webkit-details-marker{display:none}
+  .lvl-badge{flex:none; width:44px; height:44px; border-radius:11px; display:grid; place-items:center;
+    font-family:"Fraunces",serif; font-weight:600; font-size:19px; color:#fff}
+  .l1 .lvl-badge{background:var(--teal)}  .l2 .lvl-badge{background:var(--gold)}  .l3 .lvl-badge{background:var(--terra)}
+  .cap .t{flex:1; min-width:0}
+  .cap .t .k{font-size:12.5px; font-weight:600; letter-spacing:.1em; text-transform:uppercase; color:var(--muted)}
+  .l1 .t .k{color:var(--teal)} .l2 .t .k{color:var(--gold)} .l3 .t .k{color:var(--terra)}
+  .cap .t h3{font-size:21px; margin:3px 0 4px}
+  .cap .t .one{color:var(--muted); font-size:15.5px}
+  .chev{flex:none; color:var(--muted); transition:transform .25s; margin-top:6px}
+  details[open] .chev{transform:rotate(90deg)}
+  .body{padding:2px 24px 24px 86px}
+  @media(max-width:560px){.body{padding-left:24px}}
+  .body p{margin:0 0 12px}
+  .body .label{font-weight:600; color:var(--ink)}
+  .pillchips{display:flex; flex-wrap:wrap; gap:8px; margin:14px 0 4px}
+  .pill{font-size:13px; background:var(--paper-2); border:1px solid var(--line); color:var(--muted);
+    padding:5px 11px; border-radius:999px; font-weight:500}
+  .catch{margin-top:14px; padding:12px 16px; border-left:3px solid var(--line); background:var(--paper);
+    border-radius:0 8px 8px 0; font-size:15px; color:var(--muted)}
+  .catch b{color:var(--ink)}
+
+  /* finding cards */
+  .finds{display:flex; flex-direction:column; gap:14px}
+  details.find{background:var(--card); border:1px solid var(--line); border-radius:12px; box-shadow:var(--shadow); overflow:hidden}
+  summary.fcap{list-style:none; cursor:pointer; padding:18px 22px; display:flex; gap:14px; align-items:flex-start}
+  summary.fcap::-webkit-details-marker{display:none}
+  .tag{flex:none; font-size:11.5px; font-weight:700; letter-spacing:.06em; text-transform:uppercase;
+    padding:4px 9px; border-radius:6px; margin-top:2px}
+  .tag.nav{background:var(--terra-soft); color:var(--terra)}
+  .tag.lbl{background:var(--gold-soft); color:var(--gold)}
+  .tag.load{background:var(--teal-soft); color:var(--teal)}
+  .fcap .ft{flex:1}
+  .fcap .ft h3{font-size:18px; font-family:"Hanken Grotesk",sans-serif; font-weight:600; letter-spacing:0}
+  .fcap .ft .sub{color:var(--muted); font-size:14.5px; margin-top:2px}
+  .fbody{padding:0 22px 20px 22px}
+  blockquote{margin:6px 0 0; padding:14px 18px; background:var(--paper); border-radius:10px;
+    border:1px dashed var(--line); font-size:15px; color:var(--ink)}
+  blockquote .bad{color:var(--terra); text-decoration:line-through; text-decoration-color:rgba(189,91,61,.5)}
+  blockquote .why{display:block; margin-top:9px; color:var(--muted); font-size:14px}
+
+  /* meta-insight band */
+  .insight{margin-top:26px; background:linear-gradient(180deg,#fff,#FCF8F1); border:1px solid var(--line);
+    border-radius:var(--radius); padding:26px 28px; box-shadow:var(--shadow)}
+  .insight .q{font-family:"Fraunces",serif; font-size:clamp(20px,2.6vw,25px); line-height:1.4; font-weight:500}
+  .insight .src{margin-top:12px; font-size:14px; color:var(--muted)}
+
+  /* actions */
+  .actions{display:grid; grid-template-columns:1fr 1fr; gap:14px}
+  @media(max-width:620px){.actions{grid-template-columns:1fr}}
+  .act{background:var(--card); border:1px solid var(--line); border-radius:12px; padding:18px 20px; box-shadow:var(--shadow)}
+  .act h3{font-family:"Hanken Grotesk",sans-serif; font-size:16px; font-weight:700; letter-spacing:0; display:flex; gap:10px; align-items:center}
+  .act .mk{color:var(--teal); font-weight:800}
+  .act p{margin:8px 0 0; font-size:15px; color:var(--muted)}
+
+  /* before/after */
+  .stats{display:grid; grid-template-columns:repeat(4,1fr); gap:14px; margin-bottom:26px}
+  @media(max-width:680px){.stats{grid-template-columns:1fr 1fr}}
+  .stat{background:var(--card); border:1px solid var(--line); border-radius:12px; padding:18px 16px; box-shadow:var(--shadow); text-align:left}
+  .stat .lab{font-size:12.5px; color:var(--muted); font-weight:600; letter-spacing:.03em}
+  .stat .row{display:flex; align-items:baseline; gap:8px; margin-top:8px}
+  .stat .b4{font-size:16px; color:var(--muted); text-decoration:line-through; text-decoration-color:var(--line)}
+  .stat .ar{color:var(--muted); font-size:14px}
+  .stat .now{font-family:"Fraunces",serif; font-size:25px; font-weight:600; color:var(--teal)}
+  .verdict{background:#2D4736; color:#EEF0E6; border-radius:var(--radius); padding:30px 32px; box-shadow:var(--shadow)}
+  .verdict .eyebrow{color:#B7CFA6}
+  .verdict .q{font-family:"Fraunces",serif; font-weight:500; font-size:clamp(20px,2.7vw,26px); line-height:1.4; margin-top:14px}
+  .verdict .src{margin-top:14px; font-size:14px; color:#A8C4BB}
+  .residual{margin-top:18px; font-size:15px; color:var(--muted)}
+  .residual b{color:var(--ink)}
+  .lvl-result{margin:0 0 26px}
+  .rk{font-size:12.5px; font-weight:700; letter-spacing:.1em; text-transform:uppercase; color:var(--muted); margin:0 0 14px}
+  .lvl-result.l1 .rk{color:var(--teal)} .lvl-result.l2 .rk{color:var(--gold)} .lvl-result.l3 .rk{color:var(--terra)}
+  .mech{font-size:15.5px; color:var(--muted); margin:2px 0 0; line-height:1.55}
+  .mech b{color:var(--ink)}
+  .l2line{font-size:16.5px; color:var(--ink); background:var(--card); border:1px solid var(--line);
+    border-radius:12px; padding:18px 22px; box-shadow:var(--shadow); line-height:1.55}
+  .blist{margin:8px 0 0; padding:0; list-style:none; font-size:14.5px; color:var(--muted); line-height:1.5}
+  .blist li{padding:5px 0 5px 18px; position:relative}
+  .blist li:before{content:"›"; position:absolute; left:2px; color:var(--terra); font-weight:700}
+  .units{display:flex; flex-direction:column; gap:9px}
+  details.unit{background:var(--card); border:1px solid var(--line); border-radius:11px; box-shadow:var(--shadow); overflow:hidden}
+  summary.ucap{list-style:none; cursor:pointer; padding:14px 20px; display:flex; gap:14px; align-items:center}
+  summary.ucap::-webkit-details-marker{display:none}
+  .unum{flex:none; width:34px; height:34px; border-radius:9px; display:grid; place-items:center;
+    background:var(--paper-2); color:var(--muted); font-family:"Fraunces",serif; font-weight:600; font-size:15px}
+  .ucap .ut{flex:1; min-width:0}
+  .ucap .ut .un{font-weight:600; font-size:16px; color:var(--ink)}
+  .ucap .ut .us{font-size:14px; color:var(--muted); margin-top:1px}
+  .utag{flex:none; font-size:10.5px; font-weight:700; letter-spacing:.05em; text-transform:uppercase; padding:3px 9px; border-radius:5px}
+  .utag.win{background:var(--teal-soft); color:var(--teal)}
+  .utag.fix{background:var(--gold-soft); color:var(--gold)}
+  .ubody{padding:0 20px 17px 68px; font-size:14.5px; color:var(--muted); line-height:1.56}
+  .ubody em{color:var(--ink); font-style:normal; font-weight:600}
+  @media(max-width:560px){.ubody{padding-left:20px}}
+
+  footer{padding:46px 0 70px; color:var(--muted); font-size:15px}
+  footer .big{font-family:"Fraunces",serif; font-size:21px; color:var(--ink); font-weight:500; max-width:50ch; line-height:1.45}
+  .tiny{font-size:13px; color:var(--muted); margin-top:10px}
+  a{color:var(--terra)}
+</style>
+</head>
+<body>
+
+<header class="hero"><div class="wrap">
+  <div class="eyebrow">Course Quality Review</div>
+  <h1>How we review a course before students see it.</h1>
+  <p class="lede">A three-level review that reads a course the way an exacting economist and a real student would, stress-tests its own findings, leaves you in control of what changes, and ships the approved fixes live. Here it is on <b>Principles of Macroeconomics</b>.</p>
+  <div class="meta">
+    <span>Prepared for <b>Tom O'Shea</b></span><span class="dot"></span>
+    <span><b>14 units</b> read</span><span class="dot"></span>
+    <span>findings &rarr; your call &rarr; live</span>
+  </div>
+</div></header>
+
+<!-- THE PROCESS -->
+<section><div class="wrap">
+  <div class="sec-head">
+    <h2>The process, in three levels</h2>
+    <p>Each level catches what the one before it can't, ordered from pure measurement to human judgment. Click any level to see what it checks.</p>
+  </div>
+  <div class="levels">
+
+    <details class="card l1" open>
+      <summary class="cap"><div class="lvl-badge">1</div>
+        <div class="t"><div class="k">Automated checks</div>
+          <h3>Measure what a machine can measure</h3>
+          <div class="one">Structural and workload checks, scored against real data, instant and objective.</div></div>
+        <div class="chev">&#9656;</div></summary>
+      <div class="body">
+        <p>Every course is scored against two yardsticks, so nothing here depends on opinion:</p>
+        <p><span class="label">A workload benchmark built from real student surveys.</span> Across the catalog, we asked 45,000+ students "how much work is this course versus your others?" The single best predictor of that answer turned out to be how much reading a course puts in front of students, so we measure that and place the course on the curve.</p>
+        <p><span class="label">A structural standards check.</span> One clear task per assignment; setup kept short; no more than two graded items a week; required vs. optional clearly marked; long pages that tell you where to look.</p>
+        <p><span class="label">And the plain mechanical checks.</span> Every link is followed to confirm it still resolves; every exam is opened to confirm it can actually be graded; the points are summed to confirm they reach the course total. These are the breaks a student hits first and notices most.</p>
+        <div class="pillchips">
+          <span class="pill">Reading load &amp; percentile</span><span class="pill">Tasks per week</span>
+          <span class="pill">Assignment clarity</span><span class="pill">Required / optional</span>
+          <span class="pill">Every link resolves</span><span class="pill">Points add up</span><span class="pill">Exams are gradeable</span>
+        </div>
+        <div class="catch"><b>What it catches:</b> anything countable, plus dead links and broken math. <b>What it can't:</b> whether the writing actually teaches. That needs reading.</div>
+      </div>
+    </details>
+
+    <details class="card l2">
+      <summary class="cap"><div class="lvl-badge">2</div>
+        <div class="t"><div class="k">An economist reads every unit</div>
+          <h3>Is the economics taught correctly, and honestly?</h3>
+          <div class="one">A subject expert reads all fourteen units line by line. This is the layer where the real judgment lives.</div></div>
+        <div class="chev">&#9656;</div></summary>
+      <div class="body">
+        <p>Level 1 says <em>how much</em>; Level 2 asks whether the teaching is <em>right</em>. Each unit is read against our learning-design standards and one hard test: would a careful student leave with a true picture, or with a claim they later have to un-learn?</p>
+        <p><span class="label">The questions that need a human who knows the subject.</span> Is a contested view being taught as settled fact? Is a definition subtly wrong? Does the worked example actually prepare a student for what the problem set grades? Is a unit heavy because of its length, or because of unresolved decisions the page never settles?</p>
+        <div class="pillchips">
+          <span class="pill">Is the claim true?</span><span class="pill">Contested taught as settled?</span>
+          <span class="pill">Does the example match the test?</span><span class="pill">Required vs. optional clear?</span>
+          <span class="pill">Unresolved decisions?</span>
+        </div>
+        <div class="catch"><b>What it catches:</b> wrong or oversimplified economics, one-sided framing, and gaps between what is taught and what is graded. <b>The next section is what this turned up on Macro.</b></div>
+      </div>
+    </details>
+
+    <details class="card l3">
+      <summary class="cap"><div class="lvl-badge">3</div>
+        <div class="t"><div class="k">Whole-course experience</div>
+          <h3>Walk it as a student; read it as a designer</h3>
+          <div class="one">Simulate the actual learner journey, then a top-down expert read for arc and coherence.</div></div>
+        <div class="chev">&#9656;</div></summary>
+      <div class="body">
+        <p>Checklists miss what only shows up when you move <em>through</em> a course. So at this level we do two reads and keep what they agree on:</p>
+        <p><span class="label">A student walkthrough.</span> A learner persona goes through the course start to finish and reports where they get lost, where they wonder what's required, and where it genuinely helps.</p>
+        <p><span class="label">A designer read.</span> An experienced eye checks the through-line across units, whether navigation points to real pages, whether labels are honest, and whether the assessments line up with what's taught.</p>
+        <div class="catch"><b>What it catches:</b> broken navigation, mislabeled material, exams that don't match the teaching, and the experience-level problems no checklist sees. <b>This is the level that proves the review is worth doing.</b></div>
+      </div>
+    </details>
+
+  </div>
+</div></section>
+
+<!-- DEEPER READ, SHIPPED -->
+<section><div class="wrap">
+  <div class="sec-head">
+    <h2>What that read turned up on Macro, and what shipped</h2>
+    <p>Level 2 is the heart of the review. Here is what the expert read of Macro's teaching found, how each finding was checked, and what reached the live course. Two safeguards stand between a finding and a single changed word.</p>
+  </div>
+
+  <div class="actions">
+    <div class="act"><h3><span class="mk">1</span> It raises real economic issues</h3>
+      <p>It asks whether each claim is actually true, and whether a contested view is being taught as settled fact, the kind of thing only an economist reading the prose would catch. The read of Macro's teaching raised <b>83 candidate issues</b>.</p></div>
+    <div class="act"><h3><span class="mk">2</span> A skeptic stress-tests each</h3>
+      <p>An independent second reviewer tries to <b>refute</b> every finding first. It downgraded 42 to minor and rejected one outright, so what reaches you is judgment calls, not a pile of nitpicks.</p></div>
+    <div class="act"><h3><span class="mk">3</span> You decide, then it ships</h3>
+      <p>Each surviving issue is yours to approve or reject. You approved <b>29</b> and rejected <b>38</b>; those 29, plus 15 clear-cut factual fixes, are now <b>live in the course and verified</b> in place.</p></div>
+  </div>
+
+  <div class="grp">Four of the changes that shipped <small>(of 44 now live)</small></div>
+  <div class="finds">
+
+    <details class="find">
+      <summary class="fcap"><span class="tag nav">Honesty</span>
+        <div class="ft"><h3>A contested growth claim, now marked as contested</h3>
+          <div class="sub">The course bills itself as honest; its strongest growth claim was stated as near-settled fact.</div></div></summary>
+      <div class="fbody"><blockquote>
+        Before: <span class="bad">"The institutions explain almost the entire difference in living standards. This is as close to a controlled experiment as the social sciences get."</span><br>
+        After: "Institutions account for much of the difference in living standards. This is about as close to a natural experiment as history offers, though it is a single case and the two Koreas also differed in other ways."
+        <span class="why">The institutions-versus-geography debate is genuinely live; the course now teaches it as a strong view, not a settled fact.</span>
+      </blockquote></div>
+    </details>
+
+    <details class="find">
+      <summary class="fcap"><span class="tag lbl">Correctness</span>
+        <div class="ft"><h3>An economics error fixed in the first definition students read</h3>
+          <div class="sub">GDP was defined in a way the course itself would have to walk back two units later.</div></div></summary>
+      <div class="fbody"><blockquote>
+        Before: GDP is the <span class="bad">"total value of all goods and services produced in a country in a year."</span><br>
+        After: the "total market value of all <b>final</b> goods and services produced in a country in a year (final, so we do not double-count)."
+        <span class="why">Omitting "final" double-counts intermediate goods; it is the exact simplification a student would have to un-learn when GDP is measured in Unit 8.</span>
+      </blockquote></div>
+    </details>
+
+    <details class="find">
+      <summary class="fcap"><span class="tag lbl">Correctness</span>
+        <div class="ft"><h3>A unit that quietly contradicted itself</h3>
+          <div class="sub">It taught the money multiplier as how banks create money, while saying elsewhere that reserves no longer work that way.</div></div></summary>
+      <div class="fbody"><blockquote>
+        The unit taught that the banking system "has supported several times the original deposit," then separately noted reserves have been abundant since 2008. Both halves can't be the operative story.
+        <span class="why">It now flags the multiplier as a simplified, historical model and states that today bank lending is limited by capital and loan demand, not by a reserve ratio. The student is no longer left to reconcile two contradictory accounts.</span>
+      </blockquote></div>
+    </details>
+
+    <details class="find">
+      <summary class="fcap"><span class="tag load">New content</span>
+        <div class="ft"><h3>A worked example written to fill a graded gap</h3>
+          <div class="sub">The problem set graded a skill no worked example actually demonstrated.</div></div></summary>
+      <div class="fbody"><blockquote>
+        Unit 2 grades telling a curve <em>shift</em> apart from a <em>movement along</em> the curve, but every worked example only showed shifts. We wrote one: a coffee frost shifts supply left; the price rise that follows is a movement along the demand curve, not a second shift.
+        <span class="why">The course now demonstrates the exact distinction it tests, so a student who studies the examples is actually prepared for the problem set.</span>
+      </blockquote></div>
+    </details>
+
+  </div>
+
+  <div class="insight">
+    <div class="eyebrow" style="color:var(--terra)">The honest answer to the obvious question</div>
+    <div class="q">This is where the review earns the word judgment. It makes economic calls, an independent skeptic filters them, you approve the ones worth making, and they ship to the live course. You rejected 38, including proposed hedges on the minimum wage and on GDP and well-being that you judged fine for an intro course. The tool proposes; you decide.</div>
+  </div>
+</div></section>
+
+<!-- THE RESULT -->
+<section><div class="wrap">
+  <div class="sec-head">
+    <h2>And the course is measurably better for it</h2>
+    <p>The result, in numbers and in the whole-course read.</p>
+  </div>
+  <div class="stats">
+    <div class="stat"><div class="lab">Reading load</div><div class="row"><span class="b4">72.0k</span><span class="ar">&rarr;</span><span class="now">52.7k</span></div></div>
+    <div class="stat"><div class="lab">Catalog percentile</div><div class="row"><span class="b4">93rd</span><span class="ar">&rarr;</span><span class="now">88th</span></div></div>
+    <div class="stat"><div class="lab">Long pages</div><div class="row"><span class="b4">24</span><span class="ar">&rarr;</span><span class="now">16</span></div></div>
+    <div class="stat"><div class="lab">Structural checks</div><div class="row"><span class="now">all green</span></div></div>
+  </div>
+  <div class="verdict">
+    <div class="eyebrow">The whole-course read</div>
+    <div class="q">"The same four-step move taught in Unit 2 (what changed, who's affected, which direction, where the new equilibrium lands) comes back by name at every later scale: a single market, the Fed, aggregate supply and demand, fiscal policy. A student learns one habit of mind and applies it a dozen times."</div>
+    <div class="src">A checklist can confirm a page loads; only a read can tell you the course has a genuine spine, and that what needed fixing was the scaffolding, not the pedagogy.</div>
+  </div>
+  <p class="residual"><b>The most useful thing the walkthrough surfaced</b> was what carries the course for a nervous student: being told up front that the math is light, paired with an optional self-test to skip what you already know. That is a design pattern worth repeating in every quantitative course, and the kind of thing only a student walkthrough reveals.</p>
+</div></section>
+
+<footer><div class="wrap">
+  <p class="big">A review like this finds the things that quietly cost students, fixes them, and proves the fix held. It runs the same way on any course in the catalog.</p>
+  <p class="tiny">Principles of Macroeconomics &middot; reviewed across three levels, twice &middot; full findings and tooling on file.</p>
+</div></footer>
+
+</body>
+</html>
